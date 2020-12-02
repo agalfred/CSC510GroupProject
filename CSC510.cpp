@@ -8,6 +8,7 @@
 #include <string>
 #include<sstream>
 #include <stdio.h>
+#include <cmath>
 
 using namespace std;
 
@@ -83,7 +84,7 @@ void account::mod()
 		accountType = 'S';
 	}
 	do {
-		printf("\Change balance, default is no change: ");
+		printf("Change balance, default is no change: ");
 		cin >> st;
 		int stlen = st.length();
 		if (!stlen) {
