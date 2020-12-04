@@ -35,7 +35,7 @@ int account::totalAccounts = 0;
 
 void account::create_acct()
 {
-	accountNum = totalAccounts++;
+	accountNum = totalAccounts;
 	printf("\n\nEnter the account holder's name: ");
 	cin.ignore();
 	cin.getline(name, 50);
@@ -199,7 +199,7 @@ void save_account()
 	ac.create_acct();
 	outFile.write(reinterpret_cast<char*> (&ac), sizeof(account));
 	outFile.close();
-	printf("\nAccount has been created the number is %i write it down", account::totalAccounts);
+	printf("\nAccount has been created the number is %i write it down", account::totalAccounts++);
 	fetch_accounts();
 }
 void fetch_accounts() {
