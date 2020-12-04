@@ -6,7 +6,7 @@
 #include <cctype>
 #include<iomanip>
 #include <string>
-#include<sstream>
+#include <sstream>
 #include <stdio.h>
 #include <cmath>
 
@@ -408,7 +408,7 @@ void Mortgage::amoritzation()
 		double endBal = (NewBal - NewBal);
 
 		if (NewBal > Payment)
-		{
+		{ 
 			cout.setf(ios::fixed);
 			printf("\n%d\t $ %lf \t\t $ %lf", Month, Interestp, NewBal - Payment + Interestp);
 
