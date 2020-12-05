@@ -247,7 +247,7 @@ void mod_account(int n)
 void delete_account(int n)
 {
 	acs[n].active = 0;
-	update_file;
+	update_file();
 	printf("\n\n\tAccount deleted");
 
 }
