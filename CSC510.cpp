@@ -36,6 +36,7 @@ int account::totalAccounts = 0;
 void account::create_acct()
 {
 	accountNum = totalAccounts;
+	active = 1;
 	printf("\n\nEnter the account holder's name: ");
 	cin.ignore();
 	cin.getline(name, 50);
@@ -104,7 +105,7 @@ void account::mod()
 
 void account::report_table() const
 {
-	printf("        %d         %s        %c          %d         %i\n", accountNum, name, accountType, balance, active);
+	printf("        %d         %s        %c          %d         %d\n", accountNum, name, accountType, balance, active);
 }
 
 account* acs;// main account array
@@ -185,10 +186,7 @@ int main()
 }
 void reactivate_account(int accountnum) {
 	acs[accountnum].active = 1;
-	update_file;
-	show_accounts();
-	fetch_accounts();
-	show_accounts();
+	update_file();
 	printf("\n\n\tAccount reactivated");
 }
 void save_account()
@@ -309,133 +307,3 @@ void update_file() {
 	}
 	outFile.close();
 }
-
-
-
-class Mortgage
-{
-private:
-	int Amount, Term, monthlyTerm;
-	double Interest, Payment, InterestPaid, setInterest;
-public:
-	void GetAmount();
-	void termRate();
-	void getrateTerm();
-	void amoritzation();
-	void Payments();
-};
-
-void Mortgage::GetAmount()
-{
-	system("cls");
-	printf("Tyrell Financial Services Mortgage Calculator\n");
-	printf("===============================================\n\n");
-	printf("Enter Loan Amount: ");
-	cin >> Amount;
-}
-
-
-void Mortgage::getrateTerm()
-{
-	printf("\nEnter Term Length (Years): ");
-	cin >> Term;
-	printf("\nEnter Interest Rate: ");
-	cin >> Interest;
-}
-void Mortgage::termRate()
-{
-	int check = 0;
-	int choice = 0;
-	int arr;
-	int termYr[3] = { 7,15,30 };
-	double interestYr[3] = { 5.25,5.5,5.75 };
-
-	do
-	{
-		printf("\n--------Loan Menu--------");
-		printf("\n1. 7 years at 5.25 \n2. 15 years at 5.5 \n3. 30 years at 5.75");
-		printf("\n-------------------------");
-		cin >> choice;
-		check = 0;
-		if (choice <= 0)
-		{
-			system("cls");
-			printf("Tyrell Financial Services Mortgage Calculator\n");
-			printf("===============================================\n\n");
-			printf("Enter Loan Amount: ");
-			printf("\n\nEnter only 1,2,3 to choose term and rate\n");
-			check = 1;
-		}
-		else if (choice == 1)
-			arr = 0;
-		else if (choice == 2)
-			arr = 1;
-		else if (choice == 3)
-			arr = 2;
-		else if (choice > 3)
-		{
-			system("cls");
-			printf("Tyrell Financial Services Mortgage Calculator\n");
-			printf("===============================================\n\n");
-			printf("Enter Loan Amount: ");
-			printf("\n\nEnter only 1,2,3 to choose term and rate\n");
-			check = 1;
-		}
-
-	} while (check == 1);
-	Term = termYr[arr];
-}
-void Mortgage::Payments()
-{
-	system("cls");
-	Payment = Amount * (((Interest / 100.0) / 12) / (1 - pow(1 + ((Interest / 100.0) / 12), -Term * 12)));
-	monthlyTerm = (Term * 12);
-	InterestPaid = ((Interest / 100.0) / 12);
-}
-void Mortgage::amoritzation()
-{
-	int Month = 1;
-	int listPause = 5;
-	double NewBal;
-	NewBal = Amount;
-
-	printf("\n----------------------------------------------");
-	printf("\nWith a loan of $%d for %d years\n at a rate of %lf \nyour monthly payment will be $%lf", Amount, Term, Interest, Payment);
-	printf("\n----------------------------------------------");
-	while (monthlyTerm > 0)
-	{
-		double Interestp = InterestPaid * NewBal;
-		double endBal = (NewBal - NewBal);
-
-		if (NewBal > Payment)
-		{ 
-			cout.setf(ios::fixed);
-			printf("\n%d\t $ %lf \t\t $ %lf", Month, Interestp, NewBal - Payment + Interestp);
-
-
-			if (listPause < 19)
-			{
-				++listPause;
-			}
-			else
-			{
-				printf("\n");
-				system("PAUSE");
-				listPause = 0;
-				system("cls");
-				printf("Payment \tInterest Paid \tNew Balance\n");
-			}
-		}
-		else if (NewBal <= Payment)
-		{
-			cout.setf(ios::fixed);
-			printf("\n %d \t $ %lf \t\t $%lf", Month, Interestp, endBal);
-			listPause = 0;
-		}
-		NewBal = NewBal - Payment + Interestp;
-		Month = ++Month;
-		monthlyTerm = --monthlyTerm;
-	}
-
-}
-
