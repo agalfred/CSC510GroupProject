@@ -6,7 +6,7 @@
 #include <cctype>
 #include<iomanip>
 #include <string>
-#include<sstream>
+#include <sstream>
 #include <stdio.h>
 #include <cmath>
 
@@ -35,7 +35,8 @@ int account::totalAccounts = 0;
 
 void account::create_acct()
 {
-	accountNum = totalAccounts++;
+	accountNum = totalAccounts;
+	active = 1;
 	printf("\n\nEnter the account holder's name: ");
 	cin.ignore();
 	cin.getline(name, 50);
@@ -77,14 +78,14 @@ void account::mod()
 	cin.getline(name, 50);
 	printf("\nChange account type ( [\'S\']avings or [\'C\']hecking, default is no change): ");
 	cin >> st;
-	if (st == "C" || st =="c") {
+	if (st == "C" || st == "c") {
 		accountType = 'C';
 	}
 	else if (st == "S" || st == "s") {
 		accountType = 'S';
 	}
 	do {
-		printf("Change balance, default is no change: ");
+		printf("\nChange balance, default is no change: ");
 		cin >> st;
 		int stlen = st.length();
 		if (!stlen) {
@@ -104,7 +105,7 @@ void account::mod()
 
 void account::report_table() const
 {
-	printf("        %d         %s        %c          %d \n", accountNum, name, accountType, balance);
+	printf("        %d         %s        %c          %d         %d\n", accountNum, name, accountType, balance, active);
 }
 
 account* acs;// main account array
@@ -118,6 +119,7 @@ void deposit_withdraw(int, int);
 void home();
 void update_file();
 void fetch_accounts();
+void reactivate_account(int);
 
 int main()
 {
@@ -126,14 +128,14 @@ int main()
 	do
 	{
 		system("cls");
-		printf("\n\n\nMain Menu\n\n\t1. New Account\n\n\t2. Deposit\n\n\t3. Withdraw\n\n\t4. Balance\n\n\t5. List Accounts \n\n\t6. Close Account\n\n\t7. Change Account Details\n\n\t8 Exit\n\n\tSelect menu option (1-8) ");
+		printf("\n\n\nMain Menu\n\n\t1. New Account\n\n\t2. Deposit\n\n\t3. Withdraw\n\n\t4. Balance\n\n\t5. List Accounts \n\n\t6. Close Account\n\n\t7. Change Account Details\n\n\t8. Exit\n\n\t9. Reactivate Account\n\n\tSelect menu option (1-9) ");
 		cin >> st;
 		system("cls");
 		if (!(st.length() - 1)) {// if only one character is entered, as anticipated
 			ch = st[0];
 		}
 		else {// more characters automatically trigger the default option, rather than using the last character of whatever input
-			ch = '9';
+			ch = '0';
 		}
 		switch (ch)
 		{
@@ -171,12 +173,28 @@ int main()
 		case '8':
 			printf("\n\n\tExiting banking system");
 			break;
+		case '9':
+			printf("\n\n\tEnter account number:");
+			cin >> num;
+			reactivate_account(num);
 		default:printf("\a");
 		}
 		cin.ignore();
 		cin.get();
 	} while (ch != '8');
 	return 0;
+}
+void reactivate_account(int accountnum) {
+	printf("\n\tAre you sure you would like to reactivate account number %d belonging to %s? (y) or (n), default no change ", accountnum, acs[accountnum].name);
+	cin >> st;
+	if (st == "y") {
+		acs[accountnum].active = 1;
+		update_file();
+		printf("\n\n\tAccount reactivated");
+	}
+	else {
+		printf("\n\n\tReactivation cancelled");
+	}
 }
 void save_account()
 {
@@ -186,7 +204,7 @@ void save_account()
 	ac.create_acct();
 	outFile.write(reinterpret_cast<char*> (&ac), sizeof(account));
 	outFile.close();
-	printf("\nAccount has been created");
+	printf("\nAccount has been created the number is %i write it down", account::totalAccounts++);
 	fetch_accounts();
 }
 void fetch_accounts() {
@@ -233,21 +251,26 @@ void mod_account(int n)
 }
 void delete_account(int n)
 {
-	acs[n].active = 0;
-	update_file;
-	printf("\n\n\tAccount deleted");
-
+	printf("\n\tAre you sure you would like to delete account number %d belonging to %s? (y) or (n), default no change ", n, acs[n].name);
+	cin >> st;
+	if (st == "y") {
+		acs[n].active = 0;
+		update_file();
+		printf("\n\n\tAccount deleted");
+	}
+	else {
+		printf("\n\n\tDeletion cancelled");
+	}
 }
 void show_accounts()
 {
 	printf("\n\n\t\tList of Account Holders\n\n");
 	printf("==============================================================\n");
-	printf("Account Number      NAME       Account type  Balance\n");
+	printf("Account Number      NAME       Account type  Balance	Active\n");
 	printf("==============================================================\n");
 	for (int i = 0; i < account::totalAccounts; i++)
 	{
-		if(acs[i].active)
-			acs[i].report_table();
+		acs[i].report_table();
 	}
 }
 void deposit_withdraw(int n, int option)
@@ -297,134 +320,3 @@ void update_file() {
 	}
 	outFile.close();
 }
-
-
-
-
-class Mortgage
-{
-private:
-	int Amount, Term, monthlyTerm;
-	double Interest, Payment, InterestPaid, setInterest;
-public:
-	void GetAmount();
-	void termRate();
-	void getrateTerm();
-	void amoritzation();
-	void Payments();
-};
-
-void Mortgage::GetAmount()
-{
-	system("cls");
-	printf("Tyrell Financial Services Mortgage Calculator\n");
-	printf("===============================================\n\n");
-	printf("Enter Loan Amount: ");
-	cin >> Amount;
-}
-
-
-void Mortgage::getrateTerm()
-{
-	printf("\nEnter Term Length (Years): ");
-	cin >> Term;
-	printf("\nEnter Interest Rate: ");
-	cin >> Interest;
-}
-void Mortgage::termRate()
-{
-	int check = 0;
-	int choice = 0;
-	int arr;
-	int termYr[3] = { 7,15,30 };
-	double interestYr[3] = { 5.25,5.5,5.75 };
-
-	do
-	{
-		printf("\n--------Loan Menu--------");
-		printf("\n1. 7 years at 5.25 \n2. 15 years at 5.5 \n3. 30 years at 5.75");
-		printf("\n-------------------------");
-		cin >> choice;
-		check = 0;
-		if (choice <= 0)
-		{
-			system("cls");
-			printf("Tyrell Financial Services Mortgage Calculator\n");
-			printf("===============================================\n\n");
-			printf("Enter Loan Amount: ");
-			printf("\n\nEnter only 1,2,3 to choose term and rate\n");
-			check = 1;
-		}
-		else if (choice == 1)
-			arr = 0;
-		else if (choice == 2)
-			arr = 1;
-		else if (choice == 3)
-			arr = 2;
-		else if (choice > 3)
-		{
-			system("cls");
-			printf("Tyrell Financial Services Mortgage Calculator\n");
-			printf("===============================================\n\n");
-			printf("Enter Loan Amount: ");
-			printf("\n\nEnter only 1,2,3 to choose term and rate\n");
-			check = 1;
-		}
-
-	} while (check == 1);
-	Term = termYr[arr];
-}
-void Mortgage::Payments()
-{
-	system("cls");
-	Payment = Amount * (((Interest / 100.0) / 12) / (1 - pow(1 + ((Interest / 100.0) / 12), -Term * 12)));
-	monthlyTerm = (Term * 12);
-	InterestPaid = ((Interest / 100.0) / 12);
-}
-void Mortgage::amoritzation()
-{
-	int Month = 1;
-	int listPause = 5;
-	double NewBal;
-	NewBal = Amount;
-
-	printf("\n----------------------------------------------");
-	printf("\nWith a loan of $%d for %d years\n at a rate of %lf \nyour monthly payment will be $%lf", Amount, Term, Interest, Payment);
-	printf("\n----------------------------------------------");
-	while (monthlyTerm > 0)
-	{
-		double Interestp = InterestPaid * NewBal;
-		double endBal = (NewBal - NewBal);
-
-		if (NewBal > Payment)
-		{
-			cout.setf(ios::fixed);
-			printf("\n%d\t $ %lf \t\t $ %lf", Month, Interestp, NewBal - Payment + Interestp);
-
-
-			if (listPause < 19)
-			{
-				++listPause;
-			}
-			else
-			{
-				printf("\n");
-				system("PAUSE");
-				listPause = 0;
-				system("cls");
-				printf("Payment \tInterest Paid \tNew Balance\n");
-			}
-		}
-		else if (NewBal <= Payment)
-		{
-			cout.setf(ios::fixed);
-			printf("\n %d \t $ %lf \t\t $%lf", Month, Interestp, endBal);
-			listPause = 0;
-		}
-		NewBal = NewBal - Payment + Interestp;
-		Month = ++Month;
-		monthlyTerm = --monthlyTerm;
-	}
-
-}
-
