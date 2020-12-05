@@ -244,10 +244,16 @@ void mod_account(int n)
 }
 void delete_account(int n)
 {
-	acs[n].active = 0;
-	update_file();
-	printf("\n\n\tAccount deleted");
-
+	printf("Are you sure you would like to delete account number %d belonging to %s? (y) or (n), default no change ",n ,acs[n].name);
+	cin >> st;
+	if (st == "y") {
+		acs[n].active = 0;
+		update_file();
+		printf("\n\n\tAccount deleted");
+	}
+	else {
+		printf("deletion cancelled");
+	}
 }
 void show_accounts()
 {
